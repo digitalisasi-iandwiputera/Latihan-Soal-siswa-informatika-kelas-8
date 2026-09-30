@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LATIHAN PEMAHAMAN MATERI INFORMATIKA KELAS 8 - Oleh Bapak Ian Dwi Putera,S.Pd</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-blue-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-800 p-2.5 rounded-xl border border-blue-500 shadow-inner">
+                    <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight">Latihan Pemahaman Informatika Kelas 8</h1>
+                    <p class="text-xs sm:text-sm text-blue-200 font-medium">Oleh Bapak Ian Dwi Putera, S.Pd</p>
+                </div>
+            </div>
+            <div id="quiz-progress-badge" class="hidden bg-blue-800 border border-blue-600 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide text-blue-100">
+                Soal <span id="current-q-num">1</span> dari <span id="total-q-num">20</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="bg-white rounded-2xl shadow-xl border border-blue-100 p-6 sm:p-10 fade-in text-center">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">Selamat Datang di Latihan Mandiri Informatika kelas 8 SMPN 2 BANAWA.</h2>
+            <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
+                Uji kemampuan dan pemahaman konsep informatikamu ! Setiap jawaban akan disertai dengan ulasan dan alasan yang jelas untuk memperkuat pemahamanmu!
+            </p>
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-200 transition-all transform hover:-translate-y-0.5 text-base cursor-pointer">
+                Mulai Kerjakan Soal Sekarang 🚀
+            </button>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="hidden space-y-6 fade-in">
+            <!-- Question Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-blue-100 p-6 sm:p-8">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="question-category" class="text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-3 py-1 rounded-full">Kategori Soal</span>
+                    <span class="text-xs font-semibold text-slate-400">Pertanyaan <span id="q-counter">1</span>/20</span>
+                </div>
+                <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-snug"></h3>
+                
+                <!-- Options List -->
+                <div id="options-list" class="space-y-3">
+                    <!-- Dynamic Options -->
+                </div>
+            </div>
+
+            <!-- Feedback Box -->
+            <div id="feedback-box" class="hidden bg-white rounded-2xl shadow-xl border border-blue-100 p-6 sm:p-8 fade-in">
+                <div id="feedback-header" class="flex items-center space-x-3 mb-3">
+                    <!-- Icon & Result Title -->
+                </div>
+                <p id="feedback-text" class="text-sm sm:text-base text-slate-700 leading-relaxed mb-6"></p>
+                <button onclick="nextQuestion()" class="w-full sm:w-auto px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all text-sm cursor-pointer">
+                    Lanjut ke Pertanyaan Berikutnya ➔
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden bg-white rounded-2xl shadow-xl border border-blue-100 p-6 sm:p-10 fade-in text-center">
+            <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Latihan Selesai! 🎉</h2>
+            <p class="text-slate-600 text-sm sm:text-base mb-6">Hebat! Kamu telah menyelesaikan seluruh rangkaian latihan pemahaman materi informatika.</p>
+            
+            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-6 max-w-sm mx-auto mb-8">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-1">Skor Akhir Kamu</span>
+                <div class="text-4xl sm:text-5xl font-black text-blue-700">
+                    <span id="final-score">0</span> <span class="text-xl text-blue-400 font-semibold">/ 20</span>
+                </div>
+                <p id="score-message" class="text-xs sm:text-sm text-slate-600 mt-2 font-medium"></p>
+            </div>
+
+            <button onclick="restartQuiz()" class="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all text-sm cursor-pointer">
+                Ulangi Latihan 🔄
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-blue-100 py-4 text-center text-xs text-slate-500 mt-8">
+        <p>Latihan Pemahaman TIK & Berpikir Komputasional Kelas 8 • Dikembangkan untuk Pembelajaran Interaktif</p>
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                category: "Algoritma & Pemecahan Masalah",
+                question: "Algoritma adalah urutan langkah-langkah logis dan sistematis untuk menyelesaikan suatu masalah. Berdasarkan konsep algoritma, manakah urutan langkah membuat secangkir teh manis hangat yang paling tepat?",
+                options: [
+                    "Aduk cangkir, tuang air panas, masukkan gula, lalu ambil cangkir dari lemari.",
+                    "Siapkan cangkir, masukkan teh celup dan gula, tuang air panas, lalu aduk sampai merata.",
+                    "Tuang air panas ke dalam cangkir kosong tanpa teh dan gula, lalu simpan kembali.",
+                    "Minum air panas langsung dari teko tanpa menggunakan cangkir atau sendok."
+                ],
+                correct: 1,
+                explanation: "Algoritma menuntut urutan logis. Kita harus menyiapkan wadah (cangkir) terlebih dahulu, memasukkan bahan (teh dan gula), menuangkan air panas, baru kemudian mengaduknya hingga merata."
+            },
+            {
+                category: "Berpikir Komputasional (Pola)",
+                question: "Perhatikan barisan angka berikut: 3, 7, 11, 15, 19, .... Menggunakan pengenalan pola (pattern recognition), berapakah angka selanjutnya?",
+                options: [
+                    "21",
+                    "22",
+                    "23",
+                    "25"
+                ],
+                correct: 2,
+                explanation: "Barisan angka tersebut memiliki pola penambahan tetap yaitu +4 setiap langkahnya (3+4=7, 7+4=11, dst). Jadi, angka setelah 19 adalah 19 + 4 = 23."
+            },
+            {
+                category: "Pengumpulan Data",
+                question: "Sebuah pengurus kelas ingin mengetahui jenis ekstrakurikuler paling diminati oleh 200 siswa secara cepat dan akurat. Manakah metode pengumpulan data yang paling efektif?",
+                options: [
+                    "Mengamati satu per satu siswa di kantin setiap jam istirahat.",
+                    "Membagikan formulir survei digital atau lembar kuesioner kepada seluruh siswa.",
+                    "Menebak sendiri hobi teman-teman dekat di kelas saja.",
+                    "Bertanya kepada guru piket tanpa menemui para siswa."
+                ],
+                correct: 1,
+                explanation: "Untuk populasi yang besar (200 siswa), kuesioner atau survei tertulis/digital adalah cara paling cepat, efisien, dan mewakili suara seluruh responden secara akurat."
+            },
+            {
+                category: "Jenis Data",
+                question: "Dalam suatu pendataan kelas, tercatat Data P (berat badan siswa dalam kilogram) dan Data Q (tingkat kenyamanan ruang kelas seperti 'Nyaman' atau 'Panas'). Manakah pengelompokan jenis data yang benar?",
+                options: [
+                    "Data P adalah kualitatif dan Data Q adalah kuantitatif.",
+                    "Data P adalah kuantitatif dan Data Q adalah kualitatif.",
+                    "Kedua data tersebut adalah data kualitatif.",
+                    "Kedua data tersebut adalah data kuantitatif."
+                ],
+                correct: 1,
+                explanation: "Data kuantitatif berupa angka atau ukuran numerik (berat badan), sedangkan data kualitatif berupa kategori, sifat, atau deskripsi kalimat ('Nyaman' atau 'Panas')."
+            },
+            {
+                category: "Pengolahan Data",
+                question: "Kamu menerima 120 lembar kertas hasil angket hobi yang masih tercampur acak. Urutan langkah pengolahan data yang paling benar sebelum dipakai mengambil keputusan adalah...",
+                options: [
+                    "Memutuskan pilihan tanpa melihat angket -> Mengumpulkan angket -> Membuat diagram.",
+                    "Mengumpulkan angket -> Merekap data ke tabel -> Membuat diagram -> Memutuskan pilihan.",
+                    "Langsung membuat diagram batang tanpa merekap data angka.",
+                    "Membuang separuh angket agar pekerjaannya cepat selesai."
+                ],
+                correct: 1,
+                explanation: "Pengolahan data yang runtun dimulai dari pengumpulan data mentah, direkap atau dihitung ke dalam tabel, disajikan dalam visualisasi (diagram), baru kemudian diambil keputusan."
+            },
+            {
+                category: "Analisis Dampak Keputusan",
+                question: "Apa akibat utama jika pengurus kelas memutuskan memesan ukuran jaket kelas secara asal-asalan tanpa melakukan pengukuran dan pengumpulan data ukuran badan siswa terlebih dahulu?",
+                options: [
+                    "Harga pembuatan jaket menjadi jauh lebih murah dari biasanya.",
+                    "Banyak jaket yang tidak pas di badan siswa karena ukurannya tidak sesuai kenyataan.",
+                    "Semua siswa akan merasa senang dan pas dengan ukuran jaket tersebut.",
+                    "Waktu pembuatan jaket di konveksi menjadi lebih lama."
+                ],
+                correct: 1,
+                explanation: "Keputusan tanpa data dasar yang valid (seperti ukuran tubuh) akan menghasilkan ketidakakuratan, yang berakibat pada ketidaksesuaian ukuran pakaian saat dibagikan."
+            },
+            {
+                category: "Perangkat Lunak Perkantoran",
+                question: "Raka mendapat tugas mengetik laporan cerita sejarah, sedangkan Sinta ditugaskan mengolah nilai ujian seluruh siswa dalam bentuk tabel dan grafik. Aplikasi perkantoran apakah yang paling tepat digunakan oleh Raka dan Sinta secara berurutan?",
+                options: [
+                    "Microsoft Excel untuk Raka dan Microsoft Word untuk Sinta.",
+                    "Microsoft PowerPoint untuk keduanya.",
+                    "Microsoft Word untuk Raka dan Microsoft Excel untuk Sinta.",
+                    "Microsoft Paint untuk Raka dan Microsoft Notepad untuk Sinta."
+                ],
+                correct: 2,
+                explanation: "Microsoft Word dirancang khusus untuk pengolahan kata dan teks (cocok untuk laporan sejarah), sedangkan Microsoft Excel dirancang untuk pengolahan angka, tabel, dan grafik nilai."
+            },
+            {
+                category: "Sistem Komputer & Penyimpanan",
+                question: "Tia mengetik laporan praktikum di komputer selama berjam-jam. Tiba-tiba aliran listrik padam dan komputer mati mendadak sebelum ia sempat menekan tombol SAVE. Mengapa perintah SAVE sangat krusial dalam penggunaan komputer?",
+                options: [
+                    "Menyimpan data dari memori sementara (RAM) ke penyimpanan permanen agar tidak hilang.",
+                    "Mengubah warna layar monitor menjadi lebih terang.",
+                    "Mematikan komputer secara otomatis tanpa merusak komponen.",
+                    "Mencetak dokumen secara otomatis ke printer."
+                ],
+                correct: 0,
+                explanation: "Data saat diketik berada di RAM (memori sementara yang butuh listrik). Tombol SAVE memindahkan data tersebut ke media penyimpanan permanen (Harddisk/SSD) agar aman dari mati lampu."
+            },
+            {
+                category: "Lembar Kerja (Spreadsheet)",
+                question: "Dalam lembar kerja Microsoft Excel, kotak perpotongan antara Kolom D dan Baris ke-7 dinamakan apa?",
+                options: [
+                    "Sel 7D",
+                    "Sel D7",
+                    "Baris D Kolom 7",
+                    "Kotak D7"
+                ],
+                correct: 1,
+                explanation: "Penamaan sel dalam Excel selalu didahulukan dengan huruf nama kolom diikuti oleh nomor barisnya, sehingga perpotongan Kolom D dan Baris 7 disebut Sel D7."
+            },
+            {
+                category: "Rumus Dasar Excel",
+                question: "Kamu sedang menggunakan Microsoft Excel untuk menjumlahkan nilai pada sel B1 dan sel B2. Rumus dasar manakah yang paling tepat dituliskan pada sel tujuan?",
+                options: [
+                    "B1 + B2",
+                    "SUM(B1,B2)",
+                    "=B1+B2",
+                    "TOTAL(B1:B2)"
+                ],
+                correct: 2,
+                explanation: "Setiap penulisan rumus atau formula perhitungan di Microsoft Excel wajib diawali dengan tanda sama dengan (=) diikuti operasi matematika, yaitu =B1+B2."
+            },
+            {
+                category: "Dekomposisi",
+                question: "Dalam konsep berpikir komputasional, proses memecah masalah besar yang kompleks menjadi bagian-bagian kecil yang lebih terkelola disebut...",
+                options: [
+                    "Abstraksi",
+                    "Pengenalan Pola",
+                    "Dekomposisi",
+                    "Algoritma"
+                ],
+                correct: 2,
+                explanation: "Dekomposisi adalah teknik memecah masalah besar atau sistem yang rumit menjadi komponen-komponen kecil agar lebih mudah dianalisis, diselesaikan, atau diprogram."
+            },
+            {
+                category: "Perangkat Keras (Hardware)",
+                question: "Saat merancang instruksi komputer, bagian mana yang berfungsi sebagai 'otak' utama untuk mengeksekusi perhitungan aritmatika dan perintah logika?",
+                options: [
+                    "RAM (Random Access Memory)",
+                    "CPU (Central Processing Unit)",
+                    "Hard Disk Drive",
+                    "Power Supply"
+                ],
+                correct: 1,
+                explanation: "CPU (Central Processing Unit) dikenal sebagai pusat pengendali dan otak utama komputer yang memproses seluruh instruksi perhitungan serta logika."
+            },
+            {
+                category: "Abstraksi",
+                question: "Manakah di antara pilihan berikut yang merupakan contoh penerapan konsep Abstraksi dalam kehidupan sehari-hari?",
+                options: [
+                    "Menghitung jumlah seluruh butir pasir di pantai satu per satu secara teliti.",
+                    "Melihat peta kota dengan hanya memperhatikan rute utama dan jalan tol, serta mengabaikan detail kecil seperti warna cat pagar rumah.",
+                    "Mencatat seluruh percakapan orang di jalan secara utuh tanpa terlewat satu kata pun.",
+                    "Membongkar seluruh mesin motor untuk melihat baut terkecilnya."
+                ],
+                correct: 1,
+                explanation: "Abstraksi adalah proses menyaring informasi yang penting saja dan mengabaikan detail yang tidak relevan agar fokus pada inti persoalan."
+            },
+            {
+                category: "Fungsi Statistik Excel",
+                question: "Jika kamu ingin mencari nilai rata-rata dari sel A1 sampai A5 di Microsoft Excel secara cepat, fungsi formula apa yang paling tepat digunakan?",
+                options: [
+                    "=SUM(A1:A5)",
+                    "=AVERAGE(A1:A5)",
+                    "=MAX(A1:A5)",
+                    "=COUNT(A1:A5)"
+                ],
+                correct: 1,
+                explanation: "Fungsi =AVERAGE(rentang_sel) digunakan untuk menghitung nilai rata-rata, sedangkan SUM untuk menjumlahkan, MAX untuk nilai tertinggi, dan COUNT untuk menghitung jumlah data."
+            },
+            {
+                category: "Jaringan Komputer",
+                question: "Jaringan komputer yang mencakup area geografis yang sangat luas, seperti antar kota, antar negara, bahkan antar benua, dinamakan...",
+                options: [
+                    "LAN (Local Area Network)",
+                    "MAN (Metropolitan Area Network)",
+                    "WAN (Wide Area Network)",
+                    "PAN (Personal Area Network)"
+                ],
+                correct: 2,
+                explanation: "WAN (Wide Area Network) menghubungkan perangkat dalam cakupan wilayah geografis yang sangat luas antar kota atau negara, contoh utamanya adalah internet."
+            },
+            {
+                category: "Manajemen File",
+                question: "Di dalam struktur penyimpanan komputer, apa fungsi utama dari pembuatan folder atau direktori?",
+                options: [
+                    "Mempercepat kerusakan perangkat keras komputer.",
+                    "Mengelompokkan file secara terstruktur agar mudah ditemukan dan dikelola.",
+                    "Memperbesar ukuran file dokumen agar tidak mudah terhapus.",
+                    "Mengubah format dokumen teks menjadi gambar."
+                ],
+                correct: 1,
+                explanation: "Folder atau direktori berfungsi bagaikan lemari arsip digital untuk mengelompokkan dan menata file berdasarkan kategori tertentu agar tertib dan mudah dicari."
+            },
+            {
+                category: "Perangkat Masukan (Input Device)",
+                question: "Manakah perangkat di bawah ini yang dikategorikan sebagai perangkat keras masukan (input device) pada komputer?",
+                options: [
+                    "Monitor dan Printer",
+                    "Keyboard dan Mouse",
+                    "Speaker dan Proyektor",
+                    "Headphone dan Earphone"
+                ],
+                correct: 1,
+                explanation: "Keyboard dan mouse digunakan pengguna untuk memasukkan perintah atau data ke dalam sistem komputer, sehingga dikategorikan sebagai input device."
+            },
+            {
+                category: "Internet & Search Engine",
+                question: "Apa fungsi utama dari fitur penelusuran (Search Engine) seperti Google di internet?",
+                options: [
+                    "Membuat virus komputer secara otomatis.",
+                    "Membantu pengguna menemukan informasi, dokumen, atau website tertentu berdasarkan kata kunci.",
+                    "Mengisi baterai laptop melalui jaringan Wi-Fi.",
+                    "Mengubah foto pribadi menjadi lukisan digital."
+                ],
+                correct: 1,
+                explanation: "Search Engine adalah mesin pencari di internet yang bertugas merayapi web dan membantu pengguna menemukan sumber informasi relevan berdasarkan kata kunci yang dicari."
+            },
+            {
+                category: "Perangkat Lunak Presentasi",
+                question: "Dalam pengoperasian perangkat lunak presentasi (seperti Microsoft PowerPoint), apa fungsi utama dari fitur 'Slide Transition'?",
+                options: [
+                    "Mengatur efek perpindahan visual saat berganti dari satu slide ke slide berikutnya.",
+                    "Mengubah ukuran font seluruh teks dalam presentasi menjadi huruf kapital.",
+                    "Menghapus latar belakang gambar secara otomatis.",
+                    "Menyimpan file presentasi ke dalam format PDF."
+                ],
+                correct: 0,
+                explanation: "Slide Transition adalah animasi perpindahan visual yang muncul saat layar berganti dari satu slide ke slide berikutnya agar presentasi lebih menarik."
+            },
+            {
+                category: "Keamanan Data & Backup",
+                question: "Mengapa kita disarankan untuk membuat salinan cadangan (backup) data penting ke penyimpanan awan (cloud storage) atau flashdisk secara berkala?",
+                options: [
+                    "Agar data tidak hilang permanen jika perangkat utama mengalami kerusakan, kehilangan, atau serangan siber.",
+                    "Supaya kapasitas penyimpanan komputer menjadi penuh dan cepat habis.",
+                    "Agar file dapat dibaca oleh semua orang di seluruh dunia tanpa izin.",
+                    "Agar komputer tidak pernah mengalami mati lampu."
+                ],
+                correct: 0,
+                explanation: "Pencadangan (backup) data secara rutin sangat penting sebagai langkah antisipasi pencegahan kehilangan data jika perangkat utama rusak atau hilang."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsScreen = document.getElementById('results-screen');
+        const progressBadge = document.getElementById('quiz-progress-badge');
+        
+        const qCounter = document.getElementById('q-counter');
+        const currentQNum = document.getElementById('current-q-num');
+        const totalQNum = document.getElementById('total-q-num');
+        const questionCategory = document.getElementById('question-category');
+        const questionText = document.getElementById('question-text');
+        const optionsList = document.getElementById('options-list');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackHeader = document.getElementById('feedback-header');
+        const feedbackText = document.getElementById('feedback-text');
+        const finalScore = document.getElementById('final-score');
+        const scoreMessage = document.getElementById('score-message');
+
+        totalQNum.textContent = quizData.length;
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            progressBadge.classList.remove('hidden');
+            currentQuestion = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            feedbackBox.classList.add('hidden');
+            
+            const q = quizData[currentQuestion];
+            qCounter.textContent = currentQuestion + 1;
+            currentQNum.textContent = currentQuestion + 1;
+            questionCategory.textContent = q.category;
+            questionText.textContent = q.question;
+
+            optionsList.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border border-blue-200 bg-white hover:bg-blue-50 active:bg-blue-100 font-medium text-slate-700 text-sm sm:text-base transition-all flex items-center justify-between group cursor-pointer shadow-sm';
+                btn.innerHTML = `
+                    <span class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs group-hover:bg-blue-600 group-hover:text-white transition-colors flex-shrink-0">${String.fromCharCode(65 + index)}</span>
+                        <span>${option}</span>
+                    </span>
+                `;
+                btn.onclick = () => selectAnswer(index);
+                optionsList.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizData[currentQuestion];
+            const buttons = optionsList.children;
+
+            if (selectedIndex === q.correct) {
+                score++;
+                buttons[selectedIndex].classList.remove('bg-white', 'hover:bg-blue-50', 'border-blue-200');
+                buttons[selectedIndex].classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'shadow-inner');
+                
+                feedbackHeader.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">✓</div>
+                    <h4 class="font-bold text-emerald-800 text-base">Jawaban Kamu Benar! Luar Biasa!</h4>
+                `;
+            } else {
+                buttons[selectedIndex].classList.remove('bg-white', 'hover:bg-blue-50', 'border-blue-200');
+                buttons[selectedIndex].classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900', 'shadow-inner');
+                
+                buttons[q.correct].classList.remove('bg-white', 'hover:bg-blue-50', 'border-blue-200');
+                buttons[q.correct].classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'shadow-inner');
+
+                feedbackHeader.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold">✕</div>
+                    <h4 class="font-bold text-rose-800 text-base">Kurang Tepat, Perhatikan Ulasan Berikut:</h4>
+                `;
+            }
+
+            // Disable all buttons after choice
+            for (let btn of buttons) {
+                btn.style.pointerEvents = 'none';
+            }
+
+            feedbackText.textContent = q.explanation;
+            feedbackBox.classList.remove('hidden');
+            feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContainer.classList.add('hidden');
+            progressBadge.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScore.textContent = score;
+
+            let msg = "";
+            const percentage = (score / quizData.length) * 100;
+            if (percentage >= 90) {
+                msg = "Sempurna! Penguasaan konsep TIK dan Berpikir Komputasionalmu sudah sangat matang dan hebat!";
+            } else if (percentage >= 75) {
+                msg = "Bagus sekali! Pemahaman materimu sudah sangat baik. Tingkatkan terus belajarmu ya!";
+            } else if (percentage >= 50) {
+                msg = "Cukup baik, tetapi masih perlu mengulang beberapa materi dasar informatika agar semakin mantap.";
+            } else {
+                msg = "Ayo semangat belajar lagi! Baca kembali rangkuman materi dan coba latihan kembali ya.";
+            }
+            scoreMessage.textContent = msg;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
